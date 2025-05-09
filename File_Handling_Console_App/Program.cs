@@ -112,7 +112,7 @@ namespace File_Handling_Console.App
                             try
                             {
                                 Console.ForegroundColor = ConsoleColor.Green;
-                                Console.Write("Enter the File Name : ");
+                                Console.Write("Enter the File Name to create new File : ");
                                 Console.ResetColor();
                                 string fileName = Console.ReadLine();
 
@@ -133,7 +133,7 @@ namespace File_Handling_Console.App
 
                                 string filePath = Path.Combine(DirectoryPath, fileName);
 
-                                if (!File.Exists(fileName))
+                                if (!File.Exists(filePath))
                                 {
                                     using (FileStream fs = new FileStream(filePath, FileMode.CreateNew))
                                     {
@@ -171,8 +171,125 @@ namespace File_Handling_Console.App
 
                             break;
 
-                        //case 2:
+                        case 2:
+                            Console.WriteLine();
+                            Console.ForegroundColor = ConsoleColor.DarkYellow;
+                            Console.WriteLine("             You Enter '2' for Reading the created File              ");
+                            Console.ResetColor();
+                            Console.WriteLine();
 
+                            try
+                            {
+                                ReadFile:
+                                Console.ForegroundColor = ConsoleColor.Green;
+                                Console.Write("Enter the File Name for Read : ");
+                                Console.ResetColor();
+                                string fileName = Console.ReadLine();
+
+                                if (string.IsNullOrWhiteSpace(fileName))
+                                {
+                                    Console.ForegroundColor = ConsoleColor.Red;
+                                    Console.WriteLine("File name should not be Empty");
+                                    Console.ResetColor();
+                                    goto CreateFile; ;
+                                }
+                                if (!Regex.IsMatch(fileName, @"^[A-Za-z]+\.txt$"))
+                                {
+                                    Console.ForegroundColor = ConsoleColor.Red;
+                                    Console.WriteLine("Enter the file name using only letters—no numbers or special symbols.");
+                                    Console.ResetColor();
+                                    goto CreateFile;
+                                }
+
+                                string filePath = Path.Combine(DirectoryPath, fileName);
+
+                                if (!File.Exists(filePath))
+                                {
+                                    Console.ForegroundColor = ConsoleColor.Red;
+                                    Console.WriteLine("File Not Found ");
+                                    Console.ResetColor();
+
+                                    Console.ForegroundColor = ConsoleColor.DarkYellow;
+                                    Console.WriteLine("If you want to create file Press 'C' ");
+                                    Console.WriteLine("If you want to Re-Enter the file name Press 'R' ");
+
+                                    char ch = char.Parse(Console.ReadLine());
+                                    if(ch == 'C' || ch == 'c')
+                                    {
+                                        goto CreateFile;
+                                    }
+                                    else if(ch =='R'  || ch == 'r')
+                                    {
+                                        goto ReadFile;
+                                    }
+                                    else
+                                    {
+                                        Console.ForegroundColor = ConsoleColor.Red;
+                                        Console.WriteLine("Enter the Decison Properly ");
+                                        Console.ResetColor();
+                                    }
+                                    
+                                }
+                                else
+                                {
+                                    FileInfo fi = new FileInfo(filePath);
+                                    if (fi.Length == 0)
+                                    {
+                                        Console.ForegroundColor = ConsoleColor.Red;
+                                        Console.WriteLine("The file exists but contains no data.");
+                                        Console.ResetColor();
+                                    }
+                                    else
+                                    {
+                                        string content;
+                                        using (StreamReader sr = new StreamReader(filePath))
+                                        {
+                                            content = sr.ReadToEnd();
+                                        }
+
+                                        if (content == null)
+                                        {
+                                            Console.ForegroundColor = ConsoleColor.Red;
+                                            Console.WriteLine("Empty File");
+                                            Console.ResetColor();
+                                        }
+                                        else
+                                        {
+                                            Console.WriteLine();
+                                            Console.ForegroundColor = ConsoleColor.DarkYellow;
+                                            Console.WriteLine("               ------- Content inside the File -------               ");
+                                            Console.ResetColor();
+                                            Console.WriteLine();
+
+                                            Console.WriteLine(content);
+
+                                            Console.WriteLine();
+                                            Console.WriteLine("               ---------------------------------------               ");
+                                            Console.WriteLine();
+
+                                            Console.ForegroundColor = ConsoleColor.Blue;
+                                            Console.WriteLine("Content in the file was successfully read  :)");
+                                            Console.ResetColor();
+                                        }
+                                    }
+                                }
+                            }
+                            catch (UnauthorizedAccessException e)
+                            {
+                                Console.ForegroundColor = ConsoleColor.Red;
+                                Console.WriteLine("Access Denied: You don't have permission to access this file or directory.\nPlease check your access rights.");
+                                Console.ResetColor();
+                                goto CreateFile;
+                            }
+                            catch (IOException e)
+                            {
+                                Console.ForegroundColor = ConsoleColor.Red;
+                                Console.WriteLine("A problem occurred while trying to read from or write to the file.\nPlease ensure the file is not being used by another process and try again.");
+                                Console.ResetColor();
+                                Console.WriteLine();
+                            }
+
+                            break;
 
                     }
 
