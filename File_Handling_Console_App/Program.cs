@@ -133,17 +133,9 @@ namespace File_Handling_Console.App
 
                                 string filePath = Path.Combine(DirectoryPath, fileName);
 
-                                if (File.Exists(fileName))
+                                if (!File.Exists(fileName))
                                 {
-                                    Console.ForegroundColor = ConsoleColor.DarkYellow;
-                                    Console.WriteLine("This file already exists. \nYou may continue with update, read, and delete operations.");
-                                    Console.ResetColor();
-                                    Console.WriteLine();
-                                }
-                                else
-                                {
-                                    
-                                    using (FileStream fs = File.Create(filePath))
+                                    using (FileStream fs = new FileStream(filePath, FileMode.CreateNew))
                                     {
                                         Console.ForegroundColor = ConsoleColor.Blue;
                                         Console.WriteLine("File created successfully :)"); // Assign path to global FilePath variable
@@ -152,6 +144,14 @@ namespace File_Handling_Console.App
                                     }
 
                                     FilePath = filePath;
+                                }
+                                else
+                                {
+
+                                    Console.ForegroundColor = ConsoleColor.DarkYellow;
+                                    Console.WriteLine("This file already exists. \nYou may continue with update, read, and delete operations.");
+                                    Console.ResetColor();
+                                    Console.WriteLine();
                                 }
                             }
                             catch (UnauthorizedAccessException e)
@@ -170,6 +170,9 @@ namespace File_Handling_Console.App
                             }
 
                             break;
+
+                        //case 2:
+
 
                     }
 
