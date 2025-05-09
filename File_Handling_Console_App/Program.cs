@@ -36,7 +36,7 @@ namespace File_Handling_Console.App
                     Console.WriteLine("---------------------------------------------------------------------");
 
                     //FileInterface file = new FileMethods();
-
+                    
                     int Choice = 0;
 
                     Choice:
@@ -78,10 +78,11 @@ namespace File_Handling_Console.App
                     }
 
                     String FilePath = "EmptyFile";
-                    
                     switch (Choice)
                     {
+
                         case 1:
+                           
                             Console.WriteLine();
                             Console.ForegroundColor = ConsoleColor.DarkYellow;
                             Console.WriteLine("               You Enter '1' for Creating the New File               ");
@@ -122,7 +123,10 @@ namespace File_Handling_Console.App
                                         Console.WriteLine();
                                     }
 
+
                                     FilePath = filePath;
+
+                                    
                                 }
                                 else
                                 {
@@ -159,6 +163,7 @@ namespace File_Handling_Console.App
 
                             try
                             {
+                               
                                 ReadFile:
                                 Console.ForegroundColor = ConsoleColor.Green;
                                 Console.Write("Enter the File Name for Read : ");
@@ -211,6 +216,7 @@ namespace File_Handling_Console.App
                                 }
                                 else
                                 {
+
                                     FileInfo fi = new FileInfo(filePath);
                                     if (fi.Length == 0)
                                     {
@@ -280,6 +286,7 @@ namespace File_Handling_Console.App
                             try
                             {
                                 WriteFile:
+
                                 Console.ForegroundColor = ConsoleColor.Green;
                                 Console.Write("Enter the File Name for Appending : ");
                                 Console.ResetColor();
@@ -387,6 +394,8 @@ namespace File_Handling_Console.App
                             try
                             {
                             DeleteFile:
+
+
                                 Console.ForegroundColor = ConsoleColor.Green;
                                 Console.Write("Enter the File Name for Delete : ");
                                 Console.ResetColor();
@@ -479,6 +488,7 @@ namespace File_Handling_Console.App
 
                         case 5:
                             Console.WriteLine();
+
                             Console.ForegroundColor = ConsoleColor.DarkYellow;
                             Console.WriteLine("                  You Enter '5' for Delete the File                  ");
                             Console.ResetColor();
