@@ -3,28 +3,6 @@ using System.Configuration;
 using System.Text.RegularExpressions;
 namespace File_Handling_Console.App
 {
-    //public interface FileInterface
-    //{
-    //    string IsValidFile(string filename);  
-    //}
-    //public class FileMethods : FileInterface
-    //{
-    //    public string IsValidFile(string filename)   // Method to validate the file name
-    //    {
-            
-
-    //        if (string.IsNullOrWhiteSpace(filename))
-    //        {
-    //            return "Error1"; // Empty
-    //        }
-    //        else if (!Regex.IsMatch(filename, @"^[A-Za-z]+\.txt$"))
-    //        {
-    //            return "Error2";  // Invalid format
-    //        }
-
-    //        return "None";
-    //    }
-    //}
     public class Program
     {
         static void Main(string[] args)
@@ -36,7 +14,7 @@ namespace File_Handling_Console.App
 
                 if (Directory.Exists(DirectoryPath))
                 {
-                    Console.ForegroundColor = ConsoleColor.Green;
+                    Console.ForegroundColor = ConsoleColor.Green;  
                     Console.Write($"Your Directory Path ==>   ");
                     Console.ResetColor();
                     Console.ForegroundColor = ConsoleColor.DarkGray;
@@ -50,8 +28,9 @@ namespace File_Handling_Console.App
                     Console.WriteLine("                        1. Create File                               ");
                     Console.WriteLine("                        2. Read File                                 ");
                     Console.WriteLine("                        3. Append to File                            ");
-                    Console.WriteLine("                        4. Delete File                               ");
-                    Console.WriteLine("                        5. Exit                                      ");
+                    Console.WriteLine("                        4. Delete the content inside the file        ");
+                    Console.WriteLine("                        5. Delete File                               ");
+                    Console.WriteLine("                        6. Exit                                      ");
                     Console.WriteLine();
                     Console.ForegroundColor = ConsoleColor.DarkYellow;
                     Console.WriteLine("---------------------------------------------------------------------");
@@ -74,7 +53,7 @@ namespace File_Handling_Console.App
                             Console.ResetColor();
                             goto Choice;
                         }
-                        if (choice > 5)
+                        if (choice > 6)
                         {
                             Console.ForegroundColor = ConsoleColor.Red; 
                             Console.WriteLine("Choice must be between 1 and 6.");
@@ -191,14 +170,14 @@ namespace File_Handling_Console.App
                                     Console.ForegroundColor = ConsoleColor.Red;
                                     Console.WriteLine("File name should not be Empty");
                                     Console.ResetColor();
-                                    goto CreateFile; ;
+                                    goto ReadFile; ;
                                 }
                                 if (!Regex.IsMatch(fileName, @"^[A-Za-z]+\.txt$"))
                                 {
                                     Console.ForegroundColor = ConsoleColor.Red;
                                     Console.WriteLine("Enter the file name using only letters—no numbers or special symbols.");
                                     Console.ResetColor();
-                                    goto CreateFile;
+                                    goto ReadFile;
                                 }
 
                                 string filePath = Path.Combine(DirectoryPath, fileName);
@@ -302,7 +281,7 @@ namespace File_Handling_Console.App
                             {
                                 WriteFile:
                                 Console.ForegroundColor = ConsoleColor.Green;
-                                Console.Write("Enter the File Name for Read : ");
+                                Console.Write("Enter the File Name for Appending : ");
                                 Console.ResetColor();
                                 string fileName = Console.ReadLine();
 
@@ -311,14 +290,14 @@ namespace File_Handling_Console.App
                                     Console.ForegroundColor = ConsoleColor.Red;
                                     Console.WriteLine("File name should not be Empty");
                                     Console.ResetColor();
-                                    goto CreateFile; ;
+                                    goto WriteFile; ;
                                 }
                                 if (!Regex.IsMatch(fileName, @"^[A-Za-z]+\.txt$"))
                                 {
                                     Console.ForegroundColor = ConsoleColor.Red;
                                     Console.WriteLine("Enter the file name using only letters—no numbers or special symbols.");
                                     Console.ResetColor();
-                                    goto CreateFile;
+                                    goto WriteFile;
                                 }
 
                                 string filePath = Path.Combine(DirectoryPath, fileName);
@@ -358,11 +337,12 @@ namespace File_Handling_Console.App
                                     Console.ResetColor();
                                     Console.WriteLine();
                                     string contentToAppend = Console.ReadLine();
+                                    Console.WriteLine();
                                     Console.ForegroundColor = ConsoleColor.DarkGray;
                                     Console.WriteLine("               ---------------------------------------               ");
                                     Console.ResetColor();
                                     Console.WriteLine();
-
+                                        
 
 
                                     using (StreamWriter sw = new StreamWriter(filePath, append: true))
@@ -377,13 +357,6 @@ namespace File_Handling_Console.App
                                     Console.ForegroundColor = ConsoleColor.Blue;
                                     Console.WriteLine("Your content was appended successfully :)");
                                     Console.ResetColor();
-
-                                    string content;
-                                    using (StreamReader sr = new StreamReader(filePath))
-                                    {
-                                        content = sr.ReadToEnd();
-                                    }
-
                                    
                                 }
                             }
@@ -404,8 +377,243 @@ namespace File_Handling_Console.App
 
                             break;
 
-                    }
+                        case 4:
+                            Console.WriteLine();
+                            Console.ForegroundColor = ConsoleColor.DarkYellow;
+                            Console.WriteLine("         You Enter '4' for Deleting the content of the  File         ");
+                            Console.ResetColor();
+                            Console.WriteLine();
 
+                            try
+                            {
+                            DeleteFile:
+                                Console.ForegroundColor = ConsoleColor.Green;
+                                Console.Write("Enter the File Name for Delete : ");
+                                Console.ResetColor();
+                                string fileName = Console.ReadLine();
+
+                                if (string.IsNullOrWhiteSpace(fileName))
+                                {
+                                    Console.ForegroundColor = ConsoleColor.Red;
+                                    Console.WriteLine("File name should not be Empty");
+                                    Console.ResetColor();
+                                    goto DeleteFile; ;
+                                }
+                                if (!Regex.IsMatch(fileName, @"^[A-Za-z]+\.txt$"))
+                                {
+                                    Console.ForegroundColor = ConsoleColor.Red;
+                                    Console.WriteLine("Enter the file name using only letters—no numbers or special symbols.");
+                                    Console.ResetColor();
+                                    goto DeleteFile;
+                                }
+
+                                string filePath = Path.Combine(DirectoryPath, fileName);
+
+                                if (!File.Exists(filePath))
+                                {
+                                    Console.ForegroundColor = ConsoleColor.Red;
+                                    Console.WriteLine("File Not Found ");
+                                    Console.ResetColor();
+
+                                    Console.ForegroundColor = ConsoleColor.DarkYellow;
+                                    Console.WriteLine("If you want to create file Press 'C' ");
+                                    Console.WriteLine("If you want to Re-Enter the file name Press 'R' ");
+
+                                    char ch = char.Parse(Console.ReadLine());
+                                    if (ch == 'C' || ch == 'c')
+                                    {
+                                        goto CreateFile;
+                                    }
+                                    else if (ch == 'R' || ch == 'r')
+                                    {
+                                        goto DeleteFile;
+                                    }
+                                    else
+                                    {
+                                        Console.ForegroundColor = ConsoleColor.Red;
+                                        Console.WriteLine("Enter the Decison Properly ");
+                                        Console.ResetColor();
+                                    }
+
+                                }
+                                else
+                                {
+                                    FileInfo fi = new FileInfo(filePath);
+                                    if (fi.Length == 0)
+                                    {
+                                        Console.ForegroundColor = ConsoleColor.Red;
+                                        Console.WriteLine("Already the file is Empty");
+                                        Console.ResetColor();
+                                    }
+                                    else
+                                    {
+                                        File.WriteAllText(filePath, String.Empty);
+
+                                        Console.ForegroundColor = ConsoleColor.Magenta;
+                                        Console.WriteLine("Thank you for Deleting the content form the file  :)");
+                                        Console.ResetColor();
+                                        Console.WriteLine();
+                                        Console.ForegroundColor = ConsoleColor.Blue;
+                                        Console.WriteLine("Your content was Deleted successfully :)");
+                                        Console.ResetColor();
+                                    }
+                                }
+                            }
+                            catch (UnauthorizedAccessException e)
+                            {
+                                Console.ForegroundColor = ConsoleColor.Red;
+                                Console.WriteLine("Access Denied: You don't have permission to access this file or directory.\nPlease check your access rights.");
+                                Console.ResetColor();
+                                goto CreateFile;
+                            }
+                            catch (IOException e)
+                            {
+                                Console.ForegroundColor = ConsoleColor.Red;
+                                Console.WriteLine("A problem occurred while trying to read from or write to the file.\nPlease ensure the file is not being used by another process and try again.");
+                                Console.ResetColor();
+                                Console.WriteLine();
+                            }
+
+                            break;
+
+
+                        case 5:
+                            Console.WriteLine();
+                            Console.ForegroundColor = ConsoleColor.DarkYellow;
+                            Console.WriteLine("                  You Enter '5' for Delete the File                  ");
+                            Console.ResetColor();
+                            Console.WriteLine();
+
+                            try
+                            {
+                            DeleteFile:
+                                Console.ForegroundColor = ConsoleColor.Green;
+                                Console.Write("Enter the File Name for Delete the file : ");
+                                Console.ResetColor();
+                                string fileName = Console.ReadLine();
+
+                                if (string.IsNullOrWhiteSpace(fileName))
+                                {
+                                    Console.ForegroundColor = ConsoleColor.Red;
+                                    Console.WriteLine("File name should not be Empty");
+                                    Console.ResetColor();
+                                    goto DeleteFile; ;
+                                }
+                                if (!Regex.IsMatch(fileName, @"^[A-Za-z]+\.txt$"))
+                                {
+                                    Console.ForegroundColor = ConsoleColor.Red;
+                                    Console.WriteLine("Enter the file name using only letters—no numbers or special symbols.");
+                                    Console.ResetColor();
+                                    goto DeleteFile;
+                                }
+
+                                string filePath = Path.Combine(DirectoryPath, fileName);
+
+                                if (!File.Exists(filePath))
+                                {
+                                    Console.ForegroundColor = ConsoleColor.Red;
+                                    Console.WriteLine("File not Found");
+                                    Console.ResetColor();
+
+                                    Console.ForegroundColor = ConsoleColor.DarkYellow;
+                                    Console.WriteLine("If you want to create file Press 'C' ");
+                                    Console.WriteLine("If you want to Re-Enter the file name Press 'R' ");
+
+                                    char ch = char.Parse(Console.ReadLine());
+                                    if (ch == 'C' || ch == 'c')
+                                    {
+                                        goto CreateFile;
+                                    }
+                                    else if (ch == 'R' || ch == 'r')
+                                    {
+                                        goto DeleteFile;
+                                    }
+                                    else
+                                    {
+                                        Console.ForegroundColor = ConsoleColor.Red;
+                                        Console.WriteLine("Enter the Decison Properly ");
+                                        Console.ResetColor();
+                                    }
+
+                                }
+                                else
+                                {
+                                    Console.ForegroundColor = ConsoleColor.Green;
+                                    Console.Write($"If You want to Delete {filePath} (Y/N) :  ");
+                                    Console.ResetColor();
+                                    char ch = char.Parse(Console.ReadLine());  
+                                    if(ch == 'Y' || ch == 'y')
+                                    {
+                                        File.Delete(filePath);
+                                        
+                                        Console.WriteLine();
+                                        Console.ForegroundColor = ConsoleColor.Blue;
+                                        Console.WriteLine("Your File was Deleted successfully :)");
+                                        Console.ResetColor();
+                                    }
+                                    else if(ch == 'N' || ch == 'n')
+                                    {
+                                        Console.ForegroundColor = ConsoleColor.Blue;
+                                        Console.WriteLine("Okay thnak You...!!!");
+                                        Console.ResetColor();
+                                    }
+                                }
+                            }
+                            catch (UnauthorizedAccessException e)
+                            {
+                                Console.ForegroundColor = ConsoleColor.Red;
+                                Console.WriteLine("Access Denied: You don't have permission to access this file or directory.\nPlease check your access rights.");
+                                Console.ResetColor();
+                                goto CreateFile;
+                            }
+                            catch (IOException e)
+                            {
+                                Console.ForegroundColor = ConsoleColor.Red;
+                                Console.WriteLine("A problem occurred while trying to read from or write to the file.\nPlease ensure the file is not being used by another process and try again.");
+                                Console.ResetColor();
+                                Console.WriteLine();
+                            }
+
+                            break;
+
+                        case 6:
+                            Console.ForegroundColor = ConsoleColor.Cyan;
+                            Console.WriteLine("-------------------------------------------------------------");
+                            Console.ResetColor();
+                            Console.WriteLine();
+                            Console.WriteLine();
+                            Console.ForegroundColor = ConsoleColor.Yellow;
+                            Console.WriteLine("                     You Choose to Exist :)                  ");
+                            Console.ResetColor();
+                            Console.ForegroundColor = ConsoleColor.Cyan;
+                            Console.WriteLine("-------------------------------------------------------------");
+                            Console.ResetColor();
+                            Console.WriteLine();
+                            Console.WriteLine();
+
+                            for (int i = 5; i > 0; i--)
+                            {
+                                Console.Clear();
+                                Console.ForegroundColor = ConsoleColor.Cyan;
+                                Console.Write("                 Existing From File Manager : ");
+                                Console.ResetColor();
+                                Console.ForegroundColor = ConsoleColor.Red;
+                                Console.WriteLine($" {i} ");
+                                Console.ResetColor();
+                                Thread.Sleep(1000);
+                            }
+                            break;
+                    }
+                    if (Choice == 6)
+                    {
+
+                        Console.Clear();
+                        Console.ForegroundColor = ConsoleColor.DarkYellow;
+                        Console.WriteLine("                      ~ * Thank You * ~                    ");
+                        Console.ResetColor();
+                        Console.ReadKey();
+                        break;
+                    }
                 }
                 else
                 {
@@ -415,11 +623,7 @@ namespace File_Handling_Console.App
                     Console.WriteLine();
 
                 }
-
-
             }
-
-
         }
     }
 }
