@@ -291,6 +291,119 @@ namespace File_Handling_Console.App
 
                             break;
 
+                        case 3:
+                            Console.WriteLine();
+                            Console.ForegroundColor = ConsoleColor.DarkYellow;
+                            Console.WriteLine("       You Enter '3' for Appending (Writing) the created File        ");
+                            Console.ResetColor();
+                            Console.WriteLine();
+
+                            try
+                            {
+                                WriteFile:
+                                Console.ForegroundColor = ConsoleColor.Green;
+                                Console.Write("Enter the File Name for Read : ");
+                                Console.ResetColor();
+                                string fileName = Console.ReadLine();
+
+                                if (string.IsNullOrWhiteSpace(fileName))
+                                {
+                                    Console.ForegroundColor = ConsoleColor.Red;
+                                    Console.WriteLine("File name should not be Empty");
+                                    Console.ResetColor();
+                                    goto CreateFile; ;
+                                }
+                                if (!Regex.IsMatch(fileName, @"^[A-Za-z]+\.txt$"))
+                                {
+                                    Console.ForegroundColor = ConsoleColor.Red;
+                                    Console.WriteLine("Enter the file name using only letters—no numbers or special symbols.");
+                                    Console.ResetColor();
+                                    goto CreateFile;
+                                }
+
+                                string filePath = Path.Combine(DirectoryPath, fileName);
+
+                                if (!File.Exists(filePath))
+                                {
+                                    Console.ForegroundColor = ConsoleColor.Red;
+                                    Console.WriteLine("File Not Found ");
+                                    Console.ResetColor();
+
+                                    Console.ForegroundColor = ConsoleColor.DarkYellow;
+                                    Console.WriteLine("If you want to create file Press 'C' ");
+                                    Console.WriteLine("If you want to Re-Enter the file name Press 'R' ");
+
+                                    char ch = char.Parse(Console.ReadLine());
+                                    if (ch == 'C' || ch == 'c')
+                                    {
+                                        goto CreateFile;
+                                    }
+                                    else if (ch == 'R' || ch == 'r')
+                                    {
+                                        goto WriteFile;
+                                    }
+                                    else
+                                    {
+                                        Console.ForegroundColor = ConsoleColor.Red;
+                                        Console.WriteLine("Enter the Decison Properly ");
+                                        Console.ResetColor();
+                                    }
+
+                                }
+                                else
+                                {
+                                    Console.WriteLine();
+                                    Console.ForegroundColor = ConsoleColor.DarkGray;
+                                    Console.WriteLine("               -------- Enter the Content Here -------               ");
+                                    Console.ResetColor();
+                                    Console.WriteLine();
+                                    string contentToAppend = Console.ReadLine();
+                                    Console.ForegroundColor = ConsoleColor.DarkGray;
+                                    Console.WriteLine("               ---------------------------------------               ");
+                                    Console.ResetColor();
+                                    Console.WriteLine();
+
+
+
+                                    using (StreamWriter sw = new StreamWriter(filePath, append: true))
+                                    {
+                                        sw.WriteLine(contentToAppend);
+                                    }
+
+                                    Console.ForegroundColor = ConsoleColor.Magenta;
+                                    Console.WriteLine("Thank you for entering the content for the file  :)");
+                                    Console.ResetColor();
+                                    Console.WriteLine();
+                                    Console.ForegroundColor = ConsoleColor.Blue;
+                                    Console.WriteLine("Your content was appended successfully :)");
+                                    Console.ResetColor();
+
+                                    string content;
+                                    using (StreamReader sr = new StreamReader(filePath))
+                                    {
+                                        content = sr.ReadToEnd();
+                                    }
+
+                                   
+                                }
+                            }
+                            catch (UnauthorizedAccessException e)
+                            {
+                                Console.ForegroundColor = ConsoleColor.Red;
+                                Console.WriteLine("Access Denied: You don't have permission to access this file or directory.\nPlease check your access rights.");
+                                Console.ResetColor();
+                                goto CreateFile;
+                            }
+                            catch (IOException e)
+                            {
+                                Console.ForegroundColor = ConsoleColor.Red;
+                                Console.WriteLine("A problem occurred while trying to read from or write to the file.\nPlease ensure the file is not being used by another process and try again.");
+                                Console.ResetColor();
+                                Console.WriteLine();
+                            }
+
+                            break;
+
                     }
 
                 }
